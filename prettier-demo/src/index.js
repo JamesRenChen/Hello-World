@@ -1,4 +1,4 @@
-let person = {
+var person = {
   name: 'Yoda',
   designation: 'Jedi Master ',
 };

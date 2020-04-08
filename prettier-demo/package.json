@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prettier": "prettier --write src/index.js",
     "lint": "eslint --debug src/",
-    "lint:write": "eslint --debug src/ --fix"
+    "lint:write": "eslint --debug src/ --fix",
+    "prettier": "prettier --write src/**/*.js"
   },
   "keywords": [],
   "author": "",
@@ -18,12 +18,15 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.2",
-    "husky": "^4.2.3"
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.2"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "",
-      "pre-push": ""
+        "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.(js|jsx)": ["npm run lint:write", "npm run prettier", "git add"]
   }
 }
