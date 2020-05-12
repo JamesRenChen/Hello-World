@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="./static/index.css">
+</head>
+<body>
+    <div class="container">
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+        </ul>
+    </div>
+</body>
+<script>
+    function Family (name) {
+        this.name = name
+        // 简单的防抖动函数
+        this.debounce = function (func, wait, immediate) {
+            let timeout
+            return function () {
+                const context = this
+                const args = arguments
+                const callNow = immediate & !timeout
+                timeout && clearTimeout(timeout)
+                timeout = setTimeout(function() {
+                    timeout = null
+                    if (!immediate) {
+                        return func.apply(context, args)
+                    }
+                }, wait)
+                if (callNow) func.apply(context, args)
+            }
+        }
+        
+        // 事件节流 setTimeout 实现
+        this.throttle = (func, wait) => {
+            let timeout
+            return function () {
+                let context = this
+                let args = arguments
+                if (!timeout) {
+                    timeout = setTimeout(function () {
+                        func.apply(context, args)
+                        timeout = null
+                    }, wait)
+                }
+            }
+        }
+    }
+    Family.prototype.age = 28
+
+    let family = new Family('renchen')
+    console.log(Family.prototype)
+    console.log(family.name)
+    console.log(family.age)
+
+    window.onload = () => {
+        const ul = document.querySelector('ul')
+        const liList = document.querySelectorAll('li')
+        console.log(ul)
+        console.log(liList)
+        ul.onclick = (e) => {
+            const normalizeE = e || window.event
+            const targrt = normalizeE.target || normalizeE.srcElement
+            console.log(e)
+            console.log(window.event)
+            if (targrt.nodeName.toLowerCase() === 'li') {
+                alert(targrt.innerHTML)
+            }
+        }
+        // debounce 防抖：抖动现象的本质就是指短时间内高频次触发。因此，我们可以把短时间内的多个连续调用合并成一次，也就是只触发一次回调函数。
+        // 函数防抖是指频繁触发的情况下，只有足够的空闲时间，才执行代码一次。比如生活中的坐公交，就是一定时间内，如果有人陆续刷卡上车，司机就不会开车。只有别人没刷卡了，司机才开车。
+        // throttle 节流：就是将短时间内的函数调用以一个固定的频率间隔执行，这就如同水龙头开关限制出水口流量
+        // 函数节流是指一定时间内js方法只跑一次。比如人的眨眼睛，就是一定时间内眨一次。这是函数节流最形象的解释。
+        
+        // 事件节流
+        // const throttle = (func, wait) => {
+        //     let startTime = 0
+        //     return function () {
+        //         const handleTime = +new Date()
+        //         console.log(new Date())
+        //         console.log(+new Date())
+        //         const context = this
+        //         const args = arguments
+        //         if (handleTime - startTime >= wait) {
+        //             func.apply(context, args)
+        //             startTime = handleTime
+        //         }
+        //     }
+        // }
+        
+        // 采用了节流
+        window.addEventListener('scroll', family.debounce(() => {
+            console.log('-----scroll------')
+        }, 500))
+ 
+        const options = {
+            name: 'renchen',
+            age: '28'
+        }
+        
+
+        function toRawType (value) {
+            let _toString = Object.prototype.toString
+            console.log(Object.prototype.toString.call([1, 2]))
+            console.log(Array.prototype.toString.call([1, 2]))
+            return _toString.call(value).slice(8, -1)
+        }
+        const testFunc = (options) => {
+            let name, age
+            if (toRawType(options) === 'Object') {
+                console.log('name' in options)
+                console.log('age' in options)
+                console.log('sex' in options)
+            }
+        }
+        testFunc(123)
+    }
+</script>
+<script src="./src/class/index.js"></script>
+</html>
