@@ -164,7 +164,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./src/index/helloWorld.js
 function helloworld(name) {
-  var text = "hello webpack!";
+  var text = 'hello webpack!';
   text += name.map(function (item) {
     return "hello ".concat(item, "! ");
   });
@@ -176,7 +176,7 @@ var common = __webpack_require__(0);
 // CONCATENATED MODULE: ./src/index/index.js
 
 
-var index_name = ['renchen', 'yuanyuan'];
+var index_name = ['renchen', 'yuanyuan', 'hehe'];
 document.write(helloworld(index_name));
 
 /***/ })

@@ -1,6 +1,6 @@
-import { helloworld } from './helloWorld'
-import '../../common'
+import { helloworld } from './helloWorld';
+import '../../common';
 
-let name = ['renchen', 'yuanyuan']
+const name = ['renchen', 'yuanyuan', 'hehe'];
 
-document.write(helloworld(name))
+document.write(helloworld(name));

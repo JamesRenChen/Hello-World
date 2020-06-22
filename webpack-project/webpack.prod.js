@@ -62,7 +62,14 @@ module.exports = {
         // use 指定使用的 loader 名称
         rules: [
             {test: /\.txt$/, use: 'raw-loader'},
-            {test: /\.js$/, use: 'babel-loader'}, // js
+            // js
+            {
+                test: /\.js$/, 
+                use: [
+                    'babel-loader',
+                    'eslint-loader'
+                ]
+            },
             {
                 test:/\.css$/,
                 use: [

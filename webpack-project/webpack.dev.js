@@ -58,7 +58,14 @@ module.exports = {
         // use 指定使用的 loader 名称
         rules: [
             {test: /\.txt$/, use: 'raw-loader'},
-            {test: /\.js$/, use: 'babel-loader'}, // js
+            // js
+            {
+                test: /\.js$/, 
+                use: [
+                    'babel-loader',
+                    'eslint-loader'
+                ]
+            },
             {test:/\.css$/, use: ['style-loader', 'css-loader']},  // loader 调用为链式调用，执行顺序为从右往左
             {
                 test: /\.less$/,

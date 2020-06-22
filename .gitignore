@@ -1,4 +1,3 @@
-prettier-demo/node_modules
-webpack-project/node_modules
+*/node_modules
 
 yarn-error.log
