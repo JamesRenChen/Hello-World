@@ -28,12 +28,12 @@ class Search extends React.Component {
     return (
       <div className="search-test">
         {
-                Text ? <Text /> : null
-            }
+          Text ? <Text /> : null
+        }
         Search Test
         <img src={logo} alt="加载失败" onClick={this.loadComponent.bind(this)} />
         <img className="search-test-img" src={test} alt="加载失败" />
-        <ul className="search-test-ul">
+        <ul className="search-test-ul"><
           <li>1</li>
           <li>2</li>
           <li>3</li>

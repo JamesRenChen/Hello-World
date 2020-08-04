@@ -8,37 +8,40 @@ const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plug
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const ModuleConcatenationPlugin = require('module')
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin') // 优化构建时命令行显示日志的插件
 // const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
-
-
 const setMPA = () => {
     const entry = {}
     const htmlWebpackPlugins = []
-    const entryFiles = glob.sync(path.join(__dirname, './src/*/index.js'))
+    const entryFiles = glob.sync(path.join(__dirname, './src/*/index-server.js'))
+
     Object.keys(entryFiles)
         .map((index) => {
             const entryFile = entryFiles[index]
-            const match = entryFile.match(/src\/(.*)\/index\.js/)
+            const match = entryFile.match(/src\/(.*)\/index-server\.js/)
             const pageName = match && match[1]
-            entry[pageName] = entryFile
-            htmlWebpackPlugins.push(
-                new HtmlWebpackPlugin({
-                    template: path.join(__dirname, `src/${pageName}/${pageName}.html`),
-                    filename: `${pageName}.html`,
-                    chunks: ['vendors', pageName],
-                    inject: true,
-                    minify: {
-                        html5: true,
-                        collapseWhitespace: true,
-                        preserveLineBreaks: false,
-                        minifyCSS: true,
-                        minifyJS: true,
-                        removeComments: false
-                    }
-                })
-            )
+
+            if (pageName) {
+                entry[pageName] = entryFile
+                htmlWebpackPlugins.push(
+                    new HtmlWebpackPlugin({
+                        template: path.join(__dirname, `src/${pageName}/${pageName}.html`),
+                        filename: `${pageName}.html`,
+                        chunks: ['vendors', pageName],
+                        inject: true,
+                        minify: {
+                            html5: true,
+                            collapseWhitespace: true,
+                            preserveLineBreaks: false,
+                            minifyCSS: true,
+                            minifyJS: true,
+                            removeComments: false
+                        }
+                    })
+                )
+            }
         })
+        
+    console.log('entry', entry)
     return {
         entry,
         htmlWebpackPlugins
@@ -51,8 +54,9 @@ module.exports = {
     // 输出 单入口：文件名  多入口：替换符 [name]
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: "[name]_[chunkhash:8].js"
+        filename: "[name]-server.js",
         // filename: 'bundle.js'
+        libraryTarget: "umd"
     },
     // 用来指定当前的构建环境是：production, development, none
     // 设置mode可以使用webpack内置的函数，默认是production，对应开启优化plugins
@@ -67,7 +71,8 @@ module.exports = {
             {
                 test: /\.js$/, 
                 use: [
-                    'babel-loader'
+                    'babel-loader',
+                    'eslint-loader'
                 ]
             },
             {
@@ -130,23 +135,13 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: '[name]_[contenthash:8].css'
+            filename: '[name].css'
         }),
         new OptimizeCssAssetsWebpackPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: require('cssnano')
         }),
-        new FriendlyErrorsWebpackPlugin(), // 命令行信息显示优化
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        // 构建异常错误码捕获
-        function () {
-            this.hooks.done.tap('done', (stats) => {
-                if (stats.compilation.errors && stats.compilation.errors.length && process.argv.indexOf('--watrch') == -1) {
-                    console.log('build error')
-                    process.exit(1)
-                }
-            })
-        },
+        new webpack.optimize.ModuleConcatenationPlugin()
         // new HtmlWebpackExternalsPlugin({
         //     externals: [
         //         {
@@ -179,7 +174,6 @@ module.exports = {
                 }
             }
         }
-    },
-    stats: 'errors-only'
+    }
 }
 

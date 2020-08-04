@@ -4,7 +4,10 @@ const glob = require('glob')
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin') // 优化构建时命令行显示日志的插件
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+
+
 const setMPA = () => {
     const entry = {}
     const htmlWebpackPlugins = []
@@ -32,14 +35,13 @@ const setMPA = () => {
                 })
             )
         })
-        
-    console.log('entry', entry)
     return {
         entry,
         htmlWebpackPlugins
     }
 }
 const { entry, htmlWebpackPlugins } = setMPA()
+
 module.exports = {
     // 入口 单入口：字符串  多入口：对象
     entry: entry,
@@ -62,8 +64,8 @@ module.exports = {
             {
                 test: /\.js$/, 
                 use: [
-                    'babel-loader',
-                    'eslint-loader'
+                    'babel-loader'
+                    // 'eslint-loader'
                 ]
             },
             {test:/\.css$/, use: ['style-loader', 'css-loader']},  // loader 调用为链式调用，执行顺序为从右往左
@@ -91,10 +93,6 @@ module.exports = {
             }
         ]
     },
-    devServer: {
-        contentBase: './dist',
-        hot: true
-    },
     // 轮询判断文件的最后修改时间是否发生变化，并不会立刻告诉监听者，而是先缓存起来，等 aggregateTimeout
     // 默认false
     watch: false,
@@ -110,7 +108,13 @@ module.exports = {
     plugins:[
         new webpack.HotModuleReplacementPlugin(),
         new CleanWebpackPlugin(),
+        new FriendlyErrorsWebpackPlugin(),
     ].concat(htmlWebpackPlugins),
+    devServer: {
+        contentBase: './dist',
+        hot: true,
+        stats: 'errors-only'
+    },
     devtool: 'inline-source-map'
 }
 
