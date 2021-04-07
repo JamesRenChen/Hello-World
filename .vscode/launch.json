@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // 当前无任何选中的情况下，按下 F5 会默认启动固定文件调试
+        // {
+        //     "type": "node",
+        //     "request": "launch",
+        //     "name": "Launch Program",
+        //     "program": "${workspaceFolder}/app.js",
+        //     "skipFiles": [
+        //         "<node_internals>/**"
+        //     ]
+        // },
+        // 当前编辑器窗口里打开了某个文件，按下 F5 会启动当前文件调试
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${file}",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+    ]
+}

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 浏览器样式初始化 -->
+        <link rel="stylesheet" href="./css/normalize.css">
+        <style>
+            body {
+            }
+            .top, .bottom, .wrap, .content {
+                width: 100px;
+                height: 100px;
+                background: skyblue;
+            }
+            .top {
+                margin-bottom: 100px;
+            }
+            .bottom {
+                margin-top: 100px;
+                /* 处于同一个 BFC 中，需要改变其中一个块级元素，创造新的 BFC */
+                /* display: inline-block;  */
+            }
+
+            .wrap {
+                background: pink;
+                /* 将父元素创建为一个新的 BFC */
+                /* overflow: auto; */
+            }
+            .content {
+                margin-top: 100px;
+            }
+            
+            .wrap2 {
+                overflow: auto;
+            }
+            .float-ex {
+                float: left;
+                width: 100px;
+                height: 100px;
+                background: orange;
+            }
+            .wrap2::after {
+                content: "";
+                clear: both;
+            }
+            .content2 {
+                background: #eee;
+            }
+
+            #inline-formatting-contexts span {
+                background: #eee;
+            }
+
+            .one {
+                width: 200px;
+                height: 100px;
+                background: #666;
+                margin: auto;
+            }
+
+            .two, .three {
+                width: 100%;
+                margin-top: 24px;
+                padding-left: 100px;
+                font-size: 0;
+                box-sizing: border-box;
+            }
+            .two .left, .three .left, .three .right {
+                display: inline-block;
+                vertical-align: top;
+                margin-left: -100px;
+                width: 100px;
+                height: 200px;
+                background: pink;
+            }
+            .two .right, .three .middle {
+                display: inline-block;
+                vertical-align: top;
+                width: 100%;
+                height: 200px;
+                background: skyblue;
+            }
+
+            .three {
+                margin-top: 24px;
+                padding-right: 100px;
+            }
+            .three .right {
+                margin-left: 0;
+                margin-right: -100px;
+            }
+
+            .two-wrap {
+                display: inline-block;
+                vertical-align: top;
+                font-size: 0;
+                width: 100%;
+                height: 200px;
+                background: skyblue;
+                padding-right: 100px;
+                box-sizing: border-box;
+            }
+            .two-wrap .left {
+                display: inline-block;
+                vertical-align: top;
+                margin: 0;
+                width: 100%;
+                height: 200px;
+                background: skyblue;
+            }
+            .two-wrap .right {
+                display: inline-block;
+                vertical-align: top;
+                margin-right: -100px;
+                width: 100px;
+                height: 200px;
+                background: pink;
+            }
+
+            
+            .float {
+                width: 100%;
+                height: 200px;
+                background: #888;
+                margin-top: 24px;
+            }
+            .float .left {
+                width: 100px;
+                height: 100%;
+                float: left;
+                background: pink;
+            }
+            .float .right {
+                height: 100%;
+                margin-left: 100px;
+                background: skyblue;
+            }
+
+            .container {
+                margin-top: 24px;
+                width: 100%;
+                height: 200px;
+                background: #eee;
+                padding: 0 100px 0;
+                box-sizing: border-box;
+            }
+            .container .center, .container .left, .container .right {
+                position: relative;
+                float: left;
+                height: 100%;
+            }
+            .container .center {
+                width: 100%;
+                background: skyblue;
+            }
+            .container .left {
+                width: 100px;
+                background: pink;
+                margin-left: -100%;
+                right: 100px;
+            }
+            .container .right {
+                width: 100px;
+                background: pink;
+                margin-right: -100px;
+            }
+            
+            .container2 {
+                margin-top: 24px;
+                width: 100%;
+                height: 200px;
+                position: relative;
+            }
+            .container2 .column {
+                float: left;
+                height: 200px;
+            }
+            .container2 .center-wrap {
+                width: 100%;
+                height: 200px;
+            }
+            .container2 .center {
+                margin: 0 100px;
+                height: 200px;
+                background: skyblue;
+            }
+            .container2 .left {
+                width: 100px;
+                background: pink;
+                margin-left: -100%;
+            }
+            .container2 .right {
+                width: 100px;
+                background: pink;
+                margin-left: -100px;
+            }
+
+            .container2 .center .absolute {
+                position: absolute;
+                bottom: 0;
+            }
+            .container2 {
+                overflow-y: auto;
+            }
+            .container2 .absolute {
+                position: absolute;
+                width: 100px;
+                height: 500px;
+                background: #eee;
+                top: 0;
+                left: 100px;
+            }
+
+            .flex-container {
+                margin-top: 48px;
+                height: 200px;
+                display: flex;
+                background: lightgrey;
+                justify-content: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: baseline;
+                align-content: flex-end;
+            }
+            .flex-container .item {
+                flex-basis: 200px;
+                background: pink;
+            }
+
+            /* .flex-container .center {
+                flex-grow: 1;
+                flex-basis: 900px;
+                background: skyblue;
+                order: 1;
+            } */
+            .flex-container .left {
+                flex-basis: 200px;
+                background: pink;
+            }
+            .flex-container .right {
+                flex-basis: 200px;
+                background: pink;
+                order: 2;
+            }
+                
+            [am-flex] {
+                background: #000;
+            }
+            .flex-container .center[am-flex] {
+                background: red;
+            }
+            [am-flex~="center"] {
+                flex-grow: 1;
+                flex-basis: 900px;
+                order: 1;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- <div id="traffic-light">
+
+        </div>
+        
+        <div id="getter-setter">
+            <p>
+                input1 => <input type="text" id="input1">
+            </p>
+    
+            <p>
+                input2 => <input type="text" id="input2">
+            </p>
+    
+            <div>
+                我每次比 input1 的值加1 => <span id="span"></span>
+            </div>
+        </div> -->
+
+        <!-- 格式化上下文 -->
+        <div id="app">
+            <div id="example1">
+                <div class="top"></div>
+                <div class="bottom"></div>
+            </div>
+
+            <div id="example2">
+                <div class="wrap">
+                    <div class="content"></div>
+                </div>
+            </div>
+
+            <div id="example3">
+                <div class="wrap2">
+                    <div class="float-ex">I'm float</div>
+                </div>
+                <div class="content2">content2</div>
+            </div>
+
+            <div id="inline-formatting-contexts">
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+            </div>
+
+            <!-- 单列布局 -->
+            <div>
+                <div class="one"></div>
+            </div>
+
+            <!-- 双列布局 -->
+            <div class="two">
+                <div class="left">粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色</div>
+                <div class="right">天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝</div>
+            </div>
+
+            <!-- 三列布局 -->
+            <div class="three">
+                <div class="left"></div>
+                <div class="middle"></div>
+                <div class="right"></div>
+            </div>
+
+            <!-- 三列布局套娃 -->
+            <div class="two">
+                <div class="left">粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色</div>
+                <div class="two-wrap">
+                    <div class="left">天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝</div>
+                    <div class="right">粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色</div>
+                </div>
+            </div>
+
+            <!-- 浮动两列布局 -->
+            <div class="float">
+                <div class="left">粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色</div>
+                <div class="right">天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝</div>
+            </div>
+
+            <!-- 浮动三列布局 -->
+            <!-- 圣杯布局 -->
+            <div class="container">
+                <div class="center">天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝</div>
+                <div class="left">粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色</div>
+                <div class="right">粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色</div>
+            </div>
+            <!-- 双飞翼布局 -->
+            <div class="container2">
+                <div class="center-wrap column">
+                    <div class="center">
+                        天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝天蓝
+                    </div>
+                </div>
+                <div class="left column">
+                    粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色
+                </div>
+                <div class="right column">粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色粉色</div>
+                <div class="absolute">
+                    绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位绝对定位
+                </div>
+            </div>
+
+            <!-- flex布局 -->
+            <!-- 单列布局 -->
+            <div class="flex-container">
+                <div class="item">
+                    main
+                </div>
+            </div>
+
+            <!-- 三列布局 -->
+            <div class="flex-container">
+                <div class="center" am-flex="center">
+                    main
+                </div>
+                <div class="left" am-flex="left">
+                    left
+                </div>
+                <div class="right" am-flex="right">
+                    right
+                </div>
+                <div class="left" am-flex="left">
+                    left
+                </div>
+                <div class="right" am-flex="right">
+                    right
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="./js/index.js"></script>
+    <!-- <script src="./js/token.js"></script> -->
+    <!-- <script src="./js/getterSetter.js"></script>
+    <script src="./js/demo.js"></script> -->
+</html>

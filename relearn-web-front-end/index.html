@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- 浏览器样式初始化 -->
+        <link rel="stylesheet" href="./css/normalize.css">
+        <style>
+
+        </style>
+    </head>
+
+    <body>
+        <div id="app">
+
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        // 用户列表
+        var userList = [
+            { id: '1', name: '任宸' },
+            { id: '2', name: '媛媛' },
+        ]
+        // 数据库名称
+        var dbName = 'dbName'
+        // 数据库对象
+        var db
+        // 创建数据库
+        var request = indexedDB.open(dbName, 2)
+        // 错误处理程序在这里
+        request.onerror = function (event) {
+            console.log(event)
+        }
+        request.onupgradeneeded = function (event) {
+            // 获取数据库
+            var db = event.target.result
+            // 创建一个对象储存空间来持有有关我们客户的信息
+            // 我们将用 id 作为我们的 key path，因为它保证是唯一的
+            var objectStore = db.createObjectStore('users', { keyPath: 'id' })
+            // 创建一个索引来通过 name 搜索客户
+            // 可能会有重复的，因此我们不能使用 unique 索引
+            objectStore.createIndex('name', 'name', { unique: false })
+            // 在新创建的对象储存空间中保存值
+            for (var i in userList) {
+                objectStore.add(userList[i])
+            }
+        }
+        request.onsuccess = function (event) {
+            // 获取数据库
+            var db = event.target.result
+            // 创建会话
+            var transaction = db.transaction(['users'])
+            // 获取 objectstore
+            var objectStore = transaction.objectStore('users')
+            // 获取数据
+            var request = objectStore.get('1')
+            // 打印错误
+            request.onerror = function (event) {
+                console.log(event)
+            }
+            request.onsuccess = function (event) {
+                console.log('Name for 1 is' + request.result.name)
+            }
+        }
+    </script>
+</html>
