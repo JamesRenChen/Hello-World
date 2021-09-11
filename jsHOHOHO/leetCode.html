@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>leetCode</title>
-</head>
-<body>
-</body>
-<script src="./leetCode.js"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>leetCode</title>
+    </head>
+
+    <body>
+        <table>
+            <tr>
+                <td>我是行1数据1</td>
+                <td>我是行1数据2</td>
+                <td>我是行1数据3</td>
+            </tr>
+            <tr>
+                <td>我是行2数据1</td>
+                <td>我是行2数据2</td>
+                <td>我是行2数据3</td>
+            </tr>
+        </table>
+    </body>
+
+    <script>
+        const table = document.querySelector('table')
+        const trs = table.querySelectorAll('tr')
+        const dataList = []
+        trs.forEach(item => {
+            const td = item.querySelector('td')
+            dataList.push(td.innerHTML)
+        })
+        console.log("dataList", dataList)
+    </script>
+        
 </html>
